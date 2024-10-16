@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Profile - ProfessionalMarket</title>
+    <link
+      href="https://fonts.googleapis.com/css?family=Roboto:400,500,700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family: "Roboto", sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        padding: 20px;
+      }
+      .profile-card {
+        background-color: white;
+        border-radius: 20px;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        max-width: 400px;
+        width: 100%;
+      }
+      .profile-header {
+        background: linear-gradient(45deg, #ff6b6b, #ffc2c2);
+        height: 100px;
+        position: relative;
+      }
+      .profile-img {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        border: 5px solid white;
+        position: absolute;
+        bottom: -60px;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: #f0f0f0;
+        background-size: cover;
+        background-position: center;
+      }
+      .profile-nav {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px 20px;
+      }
+      .profile-nav a {
+        color: #ff6b6b;
+        text-decoration: none;
+        font-size: 14px;
+      }
+      .profile-info {
+        text-align: center;
+        padding: 60px 20px 20px;
+      }
+      .profile-name {
+        font-size: 24px;
+        font-weight: 700;
+        margin-bottom: 5px;
+      }
+      .profile-location,
+      .profile-occupation,
+      .profile-education {
+        color: #777;
+        margin-bottom: 5px;
+      }
+      .profile-stats {
+        display: flex;
+        justify-content: space-around;
+        margin-top: 20px;
+      }
+      .stat-item {
+        text-align: center;
+      }
+      .stat-value {
+        font-size: 18px;
+        font-weight: 700;
+      }
+      .stat-label {
+        font-size: 12px;
+        color: #777;
+      }
+      .show-more {
+        background-color: #ff6b6b;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 20px;
+        margin-top: 20px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+      .show-more:hover {
+        background-color: #ff5252;
+      }
+      .additional-info {
+        padding: 0 20px 20px;
+        display: none;
+      }
+      .info-item {
+        margin-bottom: 10px;
+      }
+      .info-label {
+        font-weight: 500;
+        color: #ff6b6b;
+      }
+      .close-icon {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 24px;
+            color: white;
+            cursor: pointer;
+            z-index: 10;
+        }
+
+        .close-icon:hover {
+            color: #ff5252;
+        }
+    </style>
+  </head>
+  <body>
+    <div class="profile-card">
+      <div class="profile-header">
+        <div class="profile-img" id="profileImage"></div>
+        <div class="close-icon" onclick="navigateToHome()">×</div>
+        <div class="profile-img" id="profileImage"></div>
+      </div>
+
+      <div class="profile-nav">
+        <a href="#"><i class="fas fa-user-friends"></i> Connect</a>
+        <a href="#"><i class="fas fa-envelope"></i> Message</a>
+      </div>
+      <div class="profile-info">
+        <h1 class="profile-name" id="userName"></h1>
+        <p class="profile-location" id="userLocation"></p>
+        <p class="profile-occupation" id="userOccupation"></p>
+        <p class="profile-education" id="userEducation"></p>
+        <div class="profile-stats">
+          <div class="stat-item">
+            <div class="stat-value" id="friendsCount">0</div>
+            <div class="stat-label">Friends</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value" id="photosCount">0</div>
+            <div class="stat-label">Photos</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value" id="commentsCount">0</div>
+            <div class="stat-label">Comments</div>
+          </div>
+        </div>
+        <button class="show-more" onclick="toggleAdditionalInfo()">
+          Show more
+        </button>
+      </div>
+      <div class="additional-info" id="additionalInfo">
+        <div class="info-item">
+          <span class="info-label">Email:</span>
+          <span id="userEmail"></span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">User Type:</span>
+          <span id="userType"></span>
+        </div>
+        <div id="professionalInfo" style="display: none">
+          <div class="info-item">
+            <span class="info-label">Skills:</span>
+            <span id="userSkills"></span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Experience:</span>
+            <span id="userExperience"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const API_URL = "http://localhost:5000/api"; // Update this with your actual backend URL
+
+      async function fetchProfile() {
+        const token = localStorage.getItem("token");
+        if (!token) {
+          window.location.href = "signin.html";
+          return;
+        }
+
+        try {
+          const response = await fetch(`${API_URL}/profile`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+
+          if (response.ok) {
+            const profileData = await response.json();
+            displayProfile(profileData);
+          } else {
+            throw new Error("Failed to fetch profile");
+          }
+        } catch (error) {
+          console.error("Error fetching profile:", error);
+          alert("Failed to load profile. Please sign in again.");
+          window.location.href = "signin.html";
+        }
+      }
+
+      function displayProfile(profileData) {
+        document.getElementById("userName").textContent = profileData.name;
+        document.getElementById("userLocation").textContent =
+          profileData.location || "Location not specified";
+        document.getElementById("userOccupation").textContent =
+          profileData.profession || "Occupation not specified";
+        document.getElementById("userEducation").textContent =
+          profileData.education || "Education not specified";
+        document.getElementById("userEmail").textContent = profileData.email;
+        document.getElementById("userType").textContent = profileData.userType;
+
+        if (profileData.userType === "professional") {
+          document.getElementById("professionalInfo").style.display = "block";
+          document.getElementById("userSkills").textContent = profileData.skills
+            ? profileData.skills.join(", ")
+            : "Not specified";
+          document.getElementById("userExperience").textContent =
+            profileData.experience
+              ? `${profileData.experience} years`
+              : "Not specified";
+        }
+
+        // Set a default profile image or use the user's image if available
+        document.getElementById("profileImage").style.backgroundImage = `url(${
+          profileData.profileImage || "https://via.placeholder.com/150"
+        })`;
+
+        // Set some dummy data for stats (replace with real data if available)
+        document.getElementById("friendsCount").textContent =
+          profileData.friendsCount || 0;
+        document.getElementById("photosCount").textContent =
+          profileData.photosCount || 0;
+        document.getElementById("commentsCount").textContent =
+          profileData.commentsCount || 0;
+      }
+
+      function toggleAdditionalInfo() {
+        const additionalInfo = document.getElementById("additionalInfo");
+        const showMoreButton = document.querySelector(".show-more");
+        if (
+          additionalInfo.style.display === "none" ||
+          additionalInfo.style.display === ""
+        ) {
+          additionalInfo.style.display = "block";
+          showMoreButton.textContent = "Show less";
+        } else {
+          additionalInfo.style.display = "none";
+          showMoreButton.textContent = "Show more";
+        }
+      }
+
+      
+      function navigateToHome() {
+            window.location.href = 'index.html'; 
+        }
+
+      // Fetch profile when the page loads
+      fetchProfile();
+    </script>
+  </body>
+</html>
