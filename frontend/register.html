@@ -1,145 +1,198 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Register - ProfessionalMarket</title>
-    <link href="https://fonts.googleapis.com/css?family=Roboto|Sriracha&display=swap" rel="stylesheet">
+    <link
+      href="https://fonts.googleapis.com/css?family=Roboto|Sriracha&display=swap"
+      rel="stylesheet"
+    />
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-        .container {
-            background-color: white;
-            padding: 2rem;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-            max-width: 400px;
-            width: 100%;
-        }
-        h2 {
-            text-align: center;
-            color: #333;
-        }
-        form {
-            display: flex;
-            flex-direction: column;
-        }
-        input, select {
-            margin: 10px 0;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-        }
-        button {
-            background-color: #ff6b6b;
-            color: white;
-            border: none;
-            padding: 10px;
-            border-radius: 4px;
-            cursor: pointer;
-            margin-top: 10px;
-        }
-        button:hover {
-            background-color: #ff5252;
-        }
-        .toggle {
-            text-align: center;
-            margin-top: 1rem;
-        }
-        .toggle a {
-            color: #ff6b6b;
-            text-decoration: none;
-        }
-        #professionalFields {
-            display: none;
-        }
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
+      .container {
+        background-color: white;
+        padding: 2rem;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        max-width: 400px;
+        width: 100%;
+      }
+      h2 {
+        text-align: center;
+        color: #333;
+      }
+      form {
+        display: flex;
+        flex-direction: column;
+      }
+      input,
+      select,
+      textarea {
+        margin: 10px 0;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+      }
+      button {
+        background-color: #ff6b6b;
+        color: white;
+        border: none;
+        padding: 10px;
+        border-radius: 4px;
+        cursor: pointer;
+        margin-top: 10px;
+      }
+      button:hover {
+        background-color: #ff5252;
+      }
+      .toggle {
+        text-align: center;
+        margin-top: 1rem;
+      }
+      .toggle a {
+        color: #ff6b6b;
+        text-decoration: none;
+      }
+      #professionalFields {
+        display: none;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <div class="container">
-        <h2>Register</h2>
-        <form id="registerForm">
-            <input type="text" id="registerName" placeholder="Full Name" required>
-            <input type="email" id="registerEmail" placeholder="Email" required>
-            <input type="password" id="registerPassword" placeholder="Password" required>
-            <input type="password" id="confirmPassword" placeholder="Confirm Password" required>
-            <select id="userType" required>
-                <option value="">Select User Type</option>
-                <option value="client">Client</option>
-                <option value="professional">Professional</option>
-            </select>
-            <div id="professionalFields">
-                <input type="text" id="profession" placeholder="Profession">
-                <input type="text" id="skills" placeholder="Skills (comma-separated)">
-                <input type="number" id="experience" placeholder="Years of Experience">
-                <input type="text" id="location" placeholder="Location">
-            </div>
-            <button type="submit">Register</button>
-        </form>
-        <div class="toggle">
-            Already have an account? <a href="signin.html">Sign In</a>
+      <h2>Register</h2>
+      <form id="registerForm">
+        <input type="text" id="registerName" placeholder="Full Name" required />
+        <input type="email" id="registerEmail" placeholder="Email" required />
+        <input
+          type="password"
+          id="registerPassword"
+          placeholder="Password"
+          required
+        />
+        <input
+          type="password"
+          id="confirmPassword"
+          placeholder="Confirm Password"
+          required
+        />
+        <select id="userType" required>
+          <option value="">Select User Type</option>
+          <option value="client">Client</option>
+          <option value="professional">Professional</option>
+        </select>
+        <div id="professionalFields">
+          <input type="text" id="profession" placeholder="Profession" />
+          <input
+            type="text"
+            id="skills"
+            placeholder="Skills (comma-separated)"
+          />
+          <input
+            type="number"
+            id="experience"
+            placeholder="Years of Experience"
+          />
+          <input type="text" id="location" placeholder="Location" />
+          <textarea
+            id="certifications"
+            placeholder="Certifications (comma-separated)"
+            rows="3"
+          ></textarea>
+          <textarea
+            id="availability"
+            placeholder="Availability (comma-separated)"
+            rows="3"
+          ></textarea>
         </div>
+        <button type="submit">Register</button>
+      </form>
+      <div class="toggle">
+        Already have an account? <a href="signin.html">Sign In</a>
+      </div>
     </div>
 
     <script>
-        const API_URL = 'http://localhost:5000/api'; // Update this with your actual backend URL
+      const API_URL = "http://localhost:5000/api"; // Update this with your actual backend URL
 
-        document.getElementById('userType').addEventListener('change', function() {
-            const professionalFields = document.getElementById('professionalFields');
-            professionalFields.style.display = this.value === 'professional' ? 'block' : 'none';
+      document
+        .getElementById("userType")
+        .addEventListener("change", function () {
+          const professionalFields =
+            document.getElementById("professionalFields");
+          professionalFields.style.display =
+            this.value === "professional" ? "block" : "none";
         });
 
-        document.getElementById('registerForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            
-            const userData = {
-                name: document.getElementById('registerName').value,
-                email: document.getElementById('registerEmail').value,
-                password: document.getElementById('registerPassword').value,
-                userType: document.getElementById('userType').value,
-            };
+      document
+        .getElementById("registerForm")
+        .addEventListener("submit", async function (e) {
+          e.preventDefault();
 
-            if (userData.password !== document.getElementById('confirmPassword').value) {
-                alert('Passwords do not match');
-                return;
+          const userData = {
+            name: document.getElementById("registerName").value,
+            email: document.getElementById("registerEmail").value,
+            password: document.getElementById("registerPassword").value,
+            userType: document.getElementById("userType").value,
+          };
+
+          if (
+            userData.password !==
+            document.getElementById("confirmPassword").value
+          ) {
+            alert("Passwords do not match");
+            return;
+          }
+
+          if (userData.userType === "professional") {
+            userData.profession = document.getElementById("profession").value;
+            userData.skills = document
+              .getElementById("skills")
+              .value.split(",")
+              .map((skill) => skill.trim());
+            userData.experience = document.getElementById("experience").value;
+            userData.location = document.getElementById("location").value;
+            userData.certifications = document
+              .getElementById("certifications")
+              .value.split(",")
+              .map((cert) => cert.trim());
+            userData.availability = document
+              .getElementById("availability")
+              .value.split(",")
+              .map((time) => time.trim());
+          }
+
+          try {
+            const response = await fetch(`${API_URL}/auth/register`, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(userData),
+            });
+
+            if (response.ok) {
+              alert("Registered successfully! Please sign in.");
+              window.location.href = "signin.html";
+            } else {
+              const errorData = await response.text();
+              alert(`Registration failed: ${errorData}`);
             }
-
-            if (userData.userType === 'professional') {
-                userData.profession = document.getElementById('profession').value;
-                userData.skills = document.getElementById('skills').value.split(',').map(skill => skill.trim());
-                userData.experience = document.getElementById('experience').value;
-                userData.location = document.getElementById('location').value;
-            }
-
-            try {
-                const response = await fetch(`${API_URL}/auth/register`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(userData),
-                });
-
-                if (response.ok) {
-                    alert('Registered successfully! Please sign in.');
-                    window.location.href = 'signin.html';
-                } else {
-                    const errorData = await response.text();
-                    alert(`Registration failed: ${errorData}`);
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                alert('An error occurred. Please try again.');
-            }
+          } catch (error) {
+            console.error("Error:", error);
+            alert("An error occurred. Please try again.");
+          }
         });
     </script>
-</body>
+  </body>
 </html>

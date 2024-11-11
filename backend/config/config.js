@@ -1,18 +1,16 @@
-require('dotenv').config();
-const crypto = require('crypto');
+const mongoose = require('mongoose');
+const dotenv = require('dotenv');
 
-// Generate a random JWT secret if one isn't provided
-const generateJwtSecret = () => {
-    return crypto.randomBytes(64).toString('hex');
-};
+dotenv.config();
 
-module.exports = {
-    mongoURI: process.env.MONGO_URI || 'mongodb://localhost:27017/professionalmarketdb',
-    port: process.env.PORT || 3000,
-    jwtSecret: process.env.JWT_SECRET || generateJwtSecret(),
-    emailHost: process.env.EMAIL_HOST || 'smtp.gmail.com',
-    emailPort: process.env.EMAIL_PORT || 587,
-    emailSecure: process.env.EMAIL_SECURE === 'true',
-    emailUser: process.env.EMAIL_USER,
-    emailPass: process.env.EMAIL_PASS
-};
+const connectDB = async () => {
+    try {
+      await mongoose.connect(process.env.MONGO_URI);
+      console.log('MongoDB Connected');
+    } catch (error) {
+      console.error('MongoDB connection error:', error.message);
+      throw new Error('Database connection failed');
+    }
+  };
+
+module.exports = connectDB;

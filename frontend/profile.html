@@ -8,6 +8,12 @@
       href="https://fonts.googleapis.com/css?family=Roboto:400,500,700&display=swap"
       rel="stylesheet"
     />
+    <!-- Font Awesome for icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+
     <style>
       * {
         margin: 0;
@@ -35,7 +41,7 @@
         height: 100px;
         position: relative;
       }
-      .profile-img {
+      .profile-image {
         width: 120px;
         height: 120px;
         border-radius: 50%;
@@ -68,7 +74,7 @@
         margin-bottom: 5px;
       }
       .profile-location,
-      .profile-occupation,
+      .profile-profession,
       .profile-education {
         color: #777;
         margin-bottom: 5px;
@@ -114,26 +120,62 @@
         color: #ff6b6b;
       }
       .close-icon {
-            position: absolute;
-            top: 10px;
-            right: 15px;
-            font-size: 24px;
-            color: white;
-            cursor: pointer;
-            z-index: 10;
-        }
-
-        .close-icon:hover {
-            color: #ff5252;
-        }
+        position: absolute;
+        top: 10px;
+        right: 15px;
+        font-size: 24px;
+        color: white;
+        cursor: pointer;
+        z-index: 10;
+      }
+      .close-icon:hover {
+        color: #ff5252;
+      }
+      .edit-profile {
+        position: absolute;
+        top: 10px;
+        left: 15px;
+        font-size: 24px;
+        color: white;
+        cursor: pointer;
+        z-index: 10;
+        text-decoration: none;
+      }
+      .edit-form {
+        display: none;
+        padding: 20px;
+        background-color: #f9f9f9;
+        border-radius: 10px;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+      }
+      .edit-form input,
+      .edit-form select {
+        width: 100%;
+        padding: 10px;
+        margin: 10px 0;
+        border-radius: 5px;
+        border: 1px solid #ddd;
+      }
+      .edit-form button {
+        background-color: #ff6b6b;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 20px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+      .edit-form button:hover {
+        background-color: #ff5252;
+      }
     </style>
   </head>
   <body>
     <div class="profile-card">
       <div class="profile-header">
-        <div class="profile-img" id="profileImage"></div>
+        <div class="profile-image" id="profileImage"></div>
         <div class="close-icon" onclick="navigateToHome()">×</div>
-        <div class="profile-img" id="profileImage"></div>
+        <a class="edit-profile" href="#" onclick="toggleEditForm()">Edit</a>
       </div>
 
       <div class="profile-nav">
@@ -143,8 +185,8 @@
       <div class="profile-info">
         <h1 class="profile-name" id="userName"></h1>
         <p class="profile-location" id="userLocation"></p>
-        <p class="profile-occupation" id="userOccupation"></p>
-        <p class="profile-education" id="userEducation"></p>
+        <p class="profile-profession" id="userProfession"></p>
+
         <div class="profile-stats">
           <div class="stat-item">
             <div class="stat-value" id="friendsCount">0</div>
@@ -185,12 +227,59 @@
       </div>
     </div>
 
+    <!-- Edit form for profile details -->
+    <div class="edit-form" id="editForm">
+      <h3>Edit Profile</h3>
+      <label for="editName">Name</label>
+      <input type="text" id="editName" />
+
+      <label for="editLocation">Location</label>
+      <input type="text" id="editLocation" />
+
+      <label for="editProfession">Profession</label>
+      <input type="text" id="editProfession" />
+
+      <label for="editSkills">Skills</label>
+      <input type="text" id="editSkills" placeholder="Comma-separated skills" />
+
+      <label for="editExperience">Experience (years)</label>
+      <input type="number" id="editExperience" />
+
+      <!-- <label for="editEducation">Education</label>
+      <input type="text" id="editEducation" /> -->
+
+      <button onclick="saveProfile()">Save Changes</button>
+    </div>
+
     <script>
-      const API_URL = "http://localhost:5000/api"; // Update this with your actual backend URL
+      const API_URL = "http://localhost:5000/users"; // Update this with your actual backend URL
+
+      function toggleEditForm() {
+        const editForm = document.getElementById("editForm");
+        editForm.style.display =
+          editForm.style.display === "block" ? "none" : "block";
+
+        // Populate the form with existing data
+        if (editForm.style.display === "block") {
+          document.getElementById("editName").value =
+            document.getElementById("userName").textContent;
+          document.getElementById("editLocation").value =
+            document.getElementById("userLocation").textContent;
+          document.getElementById("editProfession").value =
+            document.getElementById("userProfession").textContent;
+          document.getElementById("editSkills").value =
+            document.getElementById("userSkills").textContent;
+          document.getElementById("editExperience").value =
+            document.getElementById("userExperience").textContent;
+          // document.getElementById("editEducation").value =
+          //   document.getElementById("userEducation").textContent;
+        }
+      }
 
       async function fetchProfile() {
         const token = localStorage.getItem("token");
         if (!token) {
+          alert("Please sign in to access your profile.");
           window.location.href = "signin.html";
           return;
         }
@@ -202,76 +291,90 @@
             },
           });
 
-          if (response.ok) {
-            const profileData = await response.json();
-            displayProfile(profileData);
-          } else {
-            throw new Error("Failed to fetch profile");
+          if (!response.ok) throw new Error("Unable to fetch profile.");
+
+          const profileData = await response.json();
+          document.getElementById("userName").textContent = profileData.name;
+          document.getElementById("userLocation").textContent =
+            profileData.location;
+          document.getElementById("userProfession").textContent =
+            profileData.profession;
+          document.getElementById("friendsCount").textContent =
+            profileData.friendsCount;
+          document.getElementById("photosCount").textContent =
+            profileData.photosCount;
+          document.getElementById("commentsCount").textContent =
+            profileData.commentsCount;
+          document.getElementById("userEmail").textContent = profileData.email;
+          document.getElementById("userType").textContent =
+            profileData.userType;
+          document.getElementById("userSkills").textContent =
+            profileData.skills.join(", ");
+          document.getElementById("userExperience").textContent =
+            profileData.experience;
+
+          if (profileData.userType === "Professional") {
+            document.getElementById("professionalInfo").style.display = "block";
           }
         } catch (error) {
-          console.error("Error fetching profile:", error);
-          alert("Failed to load profile. Please sign in again.");
+          console.error(error);
           window.location.href = "signin.html";
         }
       }
 
-      function displayProfile(profileData) {
-        document.getElementById("userName").textContent = profileData.name;
-        document.getElementById("userLocation").textContent =
-          profileData.location || "Location not specified";
-        document.getElementById("userOccupation").textContent =
-          profileData.profession || "Occupation not specified";
-        document.getElementById("userEducation").textContent =
-          profileData.education || "Education not specified";
-        document.getElementById("userEmail").textContent = profileData.email;
-        document.getElementById("userType").textContent = profileData.userType;
-
-        if (profileData.userType === "professional") {
-          document.getElementById("professionalInfo").style.display = "block";
-          document.getElementById("userSkills").textContent = profileData.skills
-            ? profileData.skills.join(", ")
-            : "Not specified";
-          document.getElementById("userExperience").textContent =
-            profileData.experience
-              ? `${profileData.experience} years`
-              : "Not specified";
-        }
-
-        // Set a default profile image or use the user's image if available
-        document.getElementById("profileImage").style.backgroundImage = `url(${
-          profileData.profileImage || "https://via.placeholder.com/150"
-        })`;
-
-        // Set some dummy data for stats (replace with real data if available)
-        document.getElementById("friendsCount").textContent =
-          profileData.friendsCount || 0;
-        document.getElementById("photosCount").textContent =
-          profileData.photosCount || 0;
-        document.getElementById("commentsCount").textContent =
-          profileData.commentsCount || 0;
-      }
-
       function toggleAdditionalInfo() {
         const additionalInfo = document.getElementById("additionalInfo");
-        const showMoreButton = document.querySelector(".show-more");
-        if (
-          additionalInfo.style.display === "none" ||
-          additionalInfo.style.display === ""
-        ) {
-          additionalInfo.style.display = "block";
-          showMoreButton.textContent = "Show less";
-        } else {
-          additionalInfo.style.display = "none";
-          showMoreButton.textContent = "Show more";
+        additionalInfo.style.display =
+          additionalInfo.style.display === "block" ? "none" : "block";
+      }
+
+      async function saveProfile() {
+        const token = localStorage.getItem("token");
+        const name = document.getElementById("editName").value;
+        const location = document.getElementById("editLocation").value;
+        const profession = document.getElementById("editProfession").value;
+        const skills = document
+          .getElementById("editSkills")
+          .value.split(",")
+          .map((skill) => skill.trim());
+        const experience = parseInt(
+          document.getElementById("editExperience").value,
+          10
+        );
+        const education = document.getElementById("editEducation").value;
+
+        try {
+          const response = await fetch(`${API_URL}/updateProfile`, {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({
+              name,
+              location,
+              profession,
+              skills,
+              experience,
+              education,
+            }),
+          });
+
+          if (!response.ok) throw new Error("Failed to save profile.");
+
+          alert("Profile updated successfully!");
+          toggleEditForm();
+          fetchProfile();
+        } catch (error) {
+          console.error(error);
+          alert("Failed to update profile.");
         }
       }
 
-      
       function navigateToHome() {
-            window.location.href = 'index.html'; 
-        }
+        window.location.href = "index.html";
+      }
 
-      // Fetch profile when the page loads
       fetchProfile();
     </script>
   </body>

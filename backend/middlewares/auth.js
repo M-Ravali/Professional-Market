@@ -1,20 +1,35 @@
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
-const config = require('../config/config');
+const dotenv = require('dotenv');
 
-module.exports = async (req, res, next) => {
-    try {
-        const token = req.header('Authorization').replace('Bearer ', '');
-        const decoded = jwt.verify(token, config.jwtSecret);
-        const user = await User.findOne({ _id: decoded._id });
+dotenv.config();
 
-        if (!user) {
-            throw new Error();
+const protect = async (req, res, next) => {
+    let token;
+
+    if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
+        try {
+            token = req.headers.authorization.split(' ')[1];
+          
+            const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        
+
+            req.user = await User.findById(decoded.id).select('-password');
+            if (!req.user) {
+                console.log('User not found'); // Log if user not found
+                return res.status(404).json({ message: 'User not found' });
+            }
+
+           
+            next();
+        } catch (error) {
+            console.error('Token verification failed:', error.message); // Log the error message
+            res.status(401).json({ message: 'Not authorized, token failed' });
         }
-
-        req.user = user;
-        next();
-    } catch (error) {
-        res.status(401).send({ error: 'Please authenticate.' });
+    } else {
+        console.log('No token provided'); // Log if no token provided
+        res.status(401).json({ message: 'Not authorized, no token' });
     }
 };
+
+module.exports = protect;

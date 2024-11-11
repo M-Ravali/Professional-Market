@@ -1,36 +1,47 @@
-const express = require("express");
-const mongoose = require("mongoose");
-const bodyParser = require("body-parser");
-const cors = require("cors");
-const path = require("path");
-const config = require("./config/config");
-const authRoutes = require("./routes/authRoutes");
-const profileRoutes = require("./routes/profileRoutes");
+const express = require('express');
+const connectDB = require('./config/config');
+const dotenv = require('dotenv');
+const authRoutes = require('./routes/authRoutes');
+const profileRoutes = require('./routes/profileRoutes')
+const professionalRoutes = require('./routes/professionalRoute')
+const bookingRoutes = require('./routes/bookingRoute')
+
+const cors = require('cors');
+const path = require('path');
+
+dotenv.config();
+connectDB();
 
 const app = express();
-const PORT = process.env.PORT || 5000;
 
-// Middleware
+  
+console.log(`JWT_SECRET: ${process.env.JWT_SECRET}`);
+  
+app.use(express.json());
 app.use(cors());
-app.use(bodyParser.json());
-app.use(express.static(path.join(__dirname, '..', 'frontend')));
 
-// Connect to MongoDB
-mongoose
-  .connect(config.mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => console.log("Connected to MongoDB"))
-  .catch((err) => console.error("Could not connect to MongoDB", err));
+app.use('/api/auth', authRoutes);
+app.use('/users', profileRoutes)
+app.use('/api', professionalRoutes)  
+app.use('/api', bookingRoutes)  
 
-// Routes
-app.use("/api/auth", authRoutes);
-app.use("/api/profile", profileRoutes);
 
-// Reset password route
+// Middleware to serve static files (like your HTML, CSS, and JS)
+app.use(express.static(path.join(__dirname, '../frontend')));
+
+// Route to handle reset password link
 app.get('/reset-password/:token', (req, res) => {
-  res.sendFile(path.join(__dirname, '..', 'frontend', 'resetpassword.html'));
+  const token = req.params.token;
+  // Render the reset password page, passing the token if necessary
+  res.sendFile(path.join(__dirname, '../frontend','resetpassword.html'));
 });
+  
 
-// Start server
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+// app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+
+const PORT = process.env.PORT || 8080;
+
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
+

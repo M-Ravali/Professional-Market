@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+  <head>
+    <!-- meta data -->
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+
+    <!--font-family-->
+    <link
+      href="https://fonts.googleapis.com/css?family=Poppins:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i"
+      rel="stylesheet"
+    />
+
+    <!-- title of site -->
+    <title>Professional Listing</title>
+
+    <!-- For favicon png -->
+    <link
+      rel="shortcut icon"
+      type="image/icon"
+      href="assets/logo/favicon.png"
+    />
+
+    <!--font-awesome.min.css-->
+    <link rel="stylesheet" href="assets/css/font-awesome.min.css" />
+
+    <!--linear icon css-->
+    <link rel="stylesheet" href="assets/css/linearicons.css" />
+
+    <!--animate.css-->
+    <link rel="stylesheet" href="assets/css/animate.css" />
+
+    <!--flaticon.css-->
+    <link rel="stylesheet" href="assets/css/flaticon.css" />
+
+    <!--slick.css-->
+    <link rel="stylesheet" href="assets/css/slick.css" />
+    <link rel="stylesheet" href="assets/css/slick-theme.css" />
+
+    <!--bootstrap.min.css-->
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css" />
+
+    <!-- bootsnav -->
+    <link rel="stylesheet" href="assets/css/bootsnav.css" />
+
+    <!--style.css-->
+    <link rel="stylesheet" href="assets/css/style.css" />
+
+    <!--responsive.css-->
+    <link rel="stylesheet" href="assets/css/responsive.css" />
+    <style>
+      /* Modal Overlay */
+      .modal {
+        display: none; /* Hidden by default */
+        position: fixed; /* Stay in place */
+        z-index: 1; /* Sit on top */
+        left: 0;
+        top: 0;
+        width: 100%; /* Full width */
+        height: 100%; /* Full height */
+        overflow: auto; /* Enable scroll if needed */
+        background-color: rgba(0, 0, 0, 0.4); /* Black with opacity */
+      }
+
+      /* Modal Content */
+      .modal-content {
+        background-color: #fff;
+        margin: 15% auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 60%; /* Width of the modal */
+        max-width: 600px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        border-radius: 8px;
+      }
+
+      /* Close Button (top-right corner) */
+      .close-booking-btn {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+        cursor: pointer;
+      }
+
+      .close-booking-btn:hover,
+      .close-booking-btn:focus {
+        color: black;
+        text-decoration: none;
+        cursor: pointer;
+      }
+
+      /* Modal Heading */
+      .modal h3 {
+        font-size: 24px;
+        margin-bottom: 20px;
+        font-weight: bold;
+        color: #333;
+      }
+
+      /* Form Label */
+      label {
+        font-size: 16px;
+        margin-bottom: 8px;
+        color: #555;
+      }
+
+      /* Form Input Fields */
+      input[type="date"],
+      input[type="time"],
+      textarea {
+        width: 100%;
+        padding: 10px;
+        margin: 8px 0;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 16px;
+      }
+
+      /* Form Textarea */
+      textarea {
+        height: 120px;
+        resize: vertical; /* Allow vertical resizing of the textarea */
+      }
+
+      /* Submit Button */
+      .bookingmodalbutton {
+        background-color: #4caf50;
+        color: white;
+        padding: 14px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 18px;
+        width: 100%;
+        margin-top: 20px;
+      }
+
+      .bookingmodalbutton:hover {
+        background-color: #45a049;
+      }
+
+      /* Booking Status Text */
+      #booking-status {
+        margin-top: 20px;
+        font-size: 18px;
+        font-weight: bold;
+        color: #ff0000;
+      }
+
+      /* Responsive Modal */
+      @media (max-width: 768px) {
+        .modal-content {
+          width: 80%; /* Make the modal width smaller on mobile */
+        }
+
+        .modal h3 {
+          font-size: 20px;
+        }
+
+        .bookingmodalbutton {
+          font-size: 16px;
+        }
+
+        label {
+          font-size: 14px;
+        }
+      }
+
+      /* Custom Scrollbar */
+      .modal::-webkit-scrollbar {
+        width: 8px;
+      }
+
+      .modal::-webkit-scrollbar-track {
+        background: #f1f1f1;
+      }
+
+      .modal::-webkit-scrollbar-thumb {
+        background: #888;
+        border-radius: 4px;
+      }
+
+      .modal::-webkit-scrollbar-thumb:hover {
+        background: #555;
+      }
+    </style>
+  </head>
+
+  <body>
+    <header id="header-top" class="header-top">
+      <ul>
+        <li>
+          <div class="header-top-left">
+            <ul>
+              <li class="select-opt">
+                <select name="language" id="language">
+                  <option value="default">EN</option>
+                  <option value="Bangla">BN</option>
+                  <option value="Arabic">AB</option>
+                </select>
+              </li>
+              <li class="select-opt">
+                <select name="currency" id="currency">
+                  <option value="usd">USD</option>
+                  <option value="euro">Euro</option>
+                  <option value="bdt">BDT</option>
+                </select>
+              </li>
+              <li class="select-opt">
+                <a href="index.html#searchForm"
+                  ><span class="lnr lnr-magnifier"></span
+                ></a>
+              </li>
+            </ul>
+          </div>
+        </li>
+        <li class="head-responsive-right pull-right">
+          <div class="header-top-right">
+            <ul>
+              <li class="header-top-contact">+1 222 777 6565</li>
+              <li id="authLinks"></li>
+            </ul>
+          </div>
+        </li>
+      </ul>
+    </header>
+    <!--/.header-top-->
+    <!--header-top end -->
+    <script>
+      async function updateAuthLinks() {
+        const authLinksElement = document.getElementById("authLinks");
+        const token = localStorage.getItem("token");
+        console.log(token);
+        if (token) {
+          try {
+            const response = await fetch(
+              "http://localhost:5000/users/profile",
+              {
+                headers: {
+                  Authorization: `Bearer ${token}`, // Ensure space after Bearer
+                },
+              }
+            );
+
+            if (response.ok) {
+              const userData = await response.json();
+              authLinksElement.innerHTML = `
+          <li class="user-profile">
+            <span class="user-name">${userData.name}</span>
+            <div class="profile-dropdown">
+              <a href="profile.html">Profile</a>
+              <a href="#" onclick="logout()">Logout</a>
+            </div>
+          </li>
+        `;
+            } else {
+              throw new Error("Failed to fetch user data");
+            }
+          } catch (error) {
+            console.error("Error:", error);
+            // Only logout if it's an authentication error
+            if (error.response && error.response.status === 401) {
+              logout();
+            }
+          }
+        } else {
+          // User is not signed in
+          authLinksElement.innerHTML = `
+      <li class="header-top-contact">
+        <a href="signin.html">Sign In</a>
+      </li>
+      <li class="header-top-contact">
+        <a href="register.html">Register</a>
+      </li>
+    `;
+        }
+      }
+      function logout() {
+        localStorage.removeItem("token");
+        updateAuthLinks();
+        window.location.href = "signin.html"; // Changed to signin.html instead of index.html
+      }
+      // Call this function when the page loads
+      document.addEventListener("DOMContentLoaded", updateAuthLinks);
+    </script>
+    <section class="top-area">
+      <div class="header-area">
+        <!-- Start Navigation -->
+        <nav
+          class="navbar navbar-default bootsnav navbar-sticky navbar-scrollspy"
+          data-minus-value-desktop="70"
+          data-minus-value-mobile="55"
+          data-speed="1000"
+        >
+          <div class="container">
+            <!-- Start Header Navigation -->
+            <div class="navbar-header">
+              <button
+                type="button"
+                class="navbar-toggle"
+                data-toggle="collapse"
+                data-target="#navbar-menu"
+              >
+                <i class="fa fa-bars"></i>
+              </button>
+              <a class="navbar-brand" href="index.html"
+                >Professional<span>Market</span></a
+              >
+            </div>
+            <!--/.navbar-header-->
+            <!-- End Header Navigation -->
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div
+              class="collapse navbar-collapse menu-ui-design"
+              id="navbar-menu"
+            >
+              <ul
+                class="nav navbar-nav navbar-right"
+                data-in="fadeInDown"
+                data-out="fadeOutUp"
+              >
+                <li class="scroll"><a href="#works">how it works</a></li>
+                <li class="scroll"><a href="listing.html">explore</a></li>
+                <li class="scroll"><a href="#reviews">review</a></li>
+                <li class="scroll"><a href="#blog">blog</a></li>
+                <li class="scroll"><a href="#contact">contact</a></li>
+                <li class="scroll"><a href="profile.html">my account</a></li>
+              </ul>
+              <!--/.nav -->
+            </div>
+            <!-- /.navbar-collapse -->
+          </div>
+          <!--/.container-->
+        </nav>
+        <!--/nav-->
+        <!-- End Navigation -->
+      </div>
+      <!--/.header-area-->
+      <div class="clearfix"></div>
+    </section>
+
+    <!-- Section for Featured Professionals -->
+    <section id="explore" class="explore">
+      <div class="container">
+        <div class="section-header">
+          <h2>Featured Professionals</h2>
+          <p>
+            Find the best Plumbers, Electricians, and Freelancers in your area
+          </p>
+        </div>
+        <div class="explore-content">
+          <div class="row" id="professionals-list">
+            <!-- Dynamic content will be injected here -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Modal for booking -->
+    <div id="booking-modal" class="modal" style="display: none">
+      <div class="modal-content">
+        <span class="close-booking-btn" onclick="closeBookingModal()"
+          >&times;</span
+        >
+        <h3>Book a Professional</h3>
+        <form id="booking-form">
+          <label for="date">Date:</label>
+          <input type="date" id="booking-date" required />
+
+          <label for="time">Time:</label>
+          <input type="time" id="booking-time" required />
+
+          <label for="message">Message:</label>
+          <textarea id="booking-message"></textarea>
+
+          <button type="submit" class="bookingmodalbutton">
+            Submit Booking
+          </button>
+        </form>
+        <p id="booking-status"></p>
+      </div>
+    </div>
+    <script>
+      // Check if the current user is a client (this could be based on session, cookies, or API call)
+      function isClient() {
+        // Example logic to check if the user is a client (this can be replaced with your own logic)
+        return localStorage.getItem("userRole") === "client"; // Assuming you store the user role in localStorage
+      }
+
+      // Show modal for booking
+      function openBookingModal(professionalId, professionalName) {
+        if (!isClient()) {
+          alert(
+            "Only clients can book professionals. Please log in as a client."
+          );
+          return;
+        }
+
+        document.getElementById("booking-modal").style.display = "block";
+        document.getElementById("booking-form").onsubmit = (e) => {
+          e.preventDefault();
+          submitBooking(professionalId);
+        };
+      }
+
+      // Close modal
+      function closeBookingModal() {
+        document.getElementById("booking-modal").style.display = "none";
+      }
+
+      // Submit booking to backend
+      async function submitBooking(professionalId) {
+        const date = document.getElementById("booking-date").value;
+        const time = document.getElementById("booking-time").value;
+        const message = document.getElementById("booking-message").value;
+
+        const bookingDetails = {
+          professionalId,
+          date,
+          time,
+          message,
+        };
+        console.log(bookingDetails);
+        try {
+          const response = await fetch("http://localhost:5000/api/bookings", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+            body: JSON.stringify(bookingDetails),
+          });
+
+          if (response.ok) {
+            const data = await response.json();
+            document.getElementById("booking-status").innerText =
+              "Booking successfully created!";
+            closeBookingModal();
+            alert("Booking successfully created!");
+          } else {
+            const errorData = await response.json();
+            document.getElementById("booking-status").innerText =
+              errorData.message || "Failed to create booking.";
+            alert("Failed to create booking");
+          }
+        } catch (error) {
+          document.getElementById("booking-status").innerText =
+            "An error occurred.";
+          console.error("Error submitting booking:", error);
+        }
+      }
+      // Function to render professionals dynamically
+      function renderProfessionals(professionals) {
+        const professionalsList = document.getElementById("professionals-list");
+
+        professionals.forEach((professional) => {
+          const ratingsText = professional.ratings
+            .map(
+              (rating) => `
+            <p><strong>Rating:</strong> ${rating.rating} - "${rating.comment}"</p>
+          `
+            )
+            .join("");
+
+          // Determine if the current user is a client to show the 'Book Now' button
+          const bookNowButton = isClient()
+            ? `<button class="close-btn open-btn" onclick="openBookingModal('${professional._id}', '${professional.name}')">Book Now</button>`
+            : `<button class="close-btn open-btn" disabled>Login as Client to Book</button>`;
+
+          const professionalCard = `
+            <div class="col-md-4 col-sm-6">
+              <div class="single-explore-item">
+                <div class="single-explore-txt bg-theme-2">
+                  <h2><a href="#">${professional.name}'s ${
+            professional.profession
+          } Services</a></h2>
+                  <p class="explore-rating-price">
+                    <span class="explore-rating">${
+                      professional.ratings.length > 0
+                        ? professional.ratings[0].rating
+                        : "N/A"
+                    }</span>
+                    <a href="#"> ${professional.ratings.length} ratings</a>
+                    <span class="explore-price-box">
+                      from
+                      <span class="explore-price">${
+                        professional.hourlyRate
+                      }</span>
+                    </span>
+                  </p>
+                  <div class="explore-person">
+                    <div class="row">
+                      <div class="col-sm-2">
+                        <div class="explore-person-img">
+                          <a href="#">
+                            <img src="assets/images/explore/person.png" alt="explore person" />
+                          </a>
+                        </div>
+                      </div>
+                      <div class="col-sm-10">
+                        <p>
+                          ${professional.name} has ${
+            professional.experience
+          } years of experience in ${
+            professional.profession
+          }, offering services such as ${professional.skills.join(", ")}.
+                        </p>
+                        <p><strong>Certifications:</strong> ${professional.certifications.join(
+                          ", "
+                        )}</p>
+                        <p><strong>Availability:</strong> ${professional.availability.join(
+                          ", "
+                        )}</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="explore-open-close-part">
+                    <button class="close-btn open-btn">${bookNowButton}</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          `;
+          professionalsList.innerHTML += professionalCard;
+        });
+      }
+
+      // Function to fetch data from the backend API
+      async function fetchProfessionals() {
+        try {
+          // Get query parameters from the current URL
+          const urlParams = new URLSearchParams(window.location.search);
+          const profession = urlParams.get("profession"); // Get 'profession' parameter
+          const location = urlParams.get("location"); // Get 'location' parameter
+
+          // Modify the API URL to include query parameters for filtering
+          let apiUrl = "http://localhost:5000/api/professionals";
+
+          // Add filters to the URL if present
+          if (profession || location) {
+            apiUrl += `?profession=${encodeURIComponent(
+              profession
+            )}&location=${encodeURIComponent(location)}`;
+          }
+          const response = await fetch(apiUrl);
+
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+
+          const professionals = await response.json();
+
+          console.log(professionals);
+          renderProfessionals(professionals);
+        } catch (error) {
+          console.error(
+            "There was a problem fetching the professionals:",
+            error
+          );
+        }
+      }
+
+      // Call the fetch function when the page loads
+      document.addEventListener("DOMContentLoaded", () => {
+        fetchProfessionals();
+      });
+    </script>
+
+    <!--footer start-->
+    <footer id="footer" class="footer">
+      <div class="container">
+        <div class="hm-footer-copyright">
+          <div class="row">
+            <div class="col-sm-5">
+              <p>
+                &copy;copyright. designed and developed by
+                <a href="https://www.themesine.com/">themesine</a>
+              </p>
+              <!--/p-->
+            </div>
+            <div class="col-sm-7">
+              <div class="footer-social">
+                <span><i class="fa fa-phone"> +1 (222) 777 8888</i></span>
+                <a href="#"><i class="fa fa-facebook"></i></a>
+                <a href="#"><i class="fa fa-twitter"></i></a>
+                <a href="#"><i class="fa fa-linkedin"></i></a>
+                <a href="#"><i class="fa fa-google-plus"></i></a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!--/.hm-footer-copyright-->
+      </div>
+      <!--/.container-->
+
+      <div id="scroll-Top">
+        <div class="return-to-top">
+          <i
+            class="fa fa-angle-up"
+            id="scroll-top"
+            data-toggle="tooltip"
+            data-placement="top"
+            title=""
+            data-original-title="Back to Top"
+            aria-hidden="true"
+          ></i>
+        </div>
+      </div>
+      <!--/.scroll-Top-->
+    </footer>
+    <!--/.footer-->
+    <!--footer end-->
+
+    <!-- Include all js compiled plugins (below), or include individual files as needed -->
+
+    <script src="assets/js/jquery.js"></script>
+
+    <!--modernizr.min.js-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js"></script>
+
+    <!--bootstrap.min.js-->
+    <script src="assets/js/bootstrap.min.js"></script>
+
+    <!-- bootsnav js -->
+    <script src="assets/js/bootsnav.js"></script>
+
+    <!--feather.min.js-->
+    <script src="assets/js/feather.min.js"></script>
+
+    <!-- counter js -->
+    <script src="assets/js/jquery.counterup.min.js"></script>
+    <script src="assets/js/waypoints.min.js"></script>
+
+    <!--slick.min.js-->
+    <script src="assets/js/slick.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
+
+    <!--Custom JS-->
+    <script src="assets/js/custom.js"></script>
+  </body>
+</html>

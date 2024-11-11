@@ -111,53 +111,56 @@
       async function updateAuthLinks() {
         const authLinksElement = document.getElementById("authLinks");
         const token = localStorage.getItem("token");
-
+        console.log(token);
         if (token) {
           try {
-            const response = await fetch("http://localhost:5000/api/profile", {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            });
+            const response = await fetch(
+              "http://localhost:5000/users/profile",
+              {
+                headers: {
+                  Authorization: `Bearer ${token}`, // Ensure space after Bearer
+                },
+              }
+            );
 
             if (response.ok) {
               const userData = await response.json();
               authLinksElement.innerHTML = `
-								<li class="user-profile">
-									<span class="user-name">${userData.name}</span>
-									<div class="profile-dropdown">
-										<a href="profile.html">Profile</a>
-										<a href="#" onclick="logout()">Logout</a>
-									</div>
-								</li>
-							`;
+          <li class="user-profile">
+            <span class="user-name">${userData.name}</span>
+            <div class="profile-dropdown">
+              <a href="profile.html">Profile</a>
+              <a href="#" onclick="logout()">Logout</a>
+            </div>
+          </li>
+        `;
             } else {
               throw new Error("Failed to fetch user data");
             }
           } catch (error) {
             console.error("Error:", error);
-            logout(); // If there's an error, log out the user
+            // Only logout if it's an authentication error
+            if (error.response && error.response.status === 401) {
+              logout();
+            }
           }
         } else {
           // User is not signed in
           authLinksElement.innerHTML = `
-						<li class="header-top-contact">
-							<a href="signin.html">Sign In</a>
-						</li>
-						<li class="header-top-contact">
-							<a href="register.html">Register</a>
-						</li>
-					`;
+      <li class="header-top-contact">
+        <a href="signin.html">Sign In</a>
+      </li>
+      <li class="header-top-contact">
+        <a href="register.html">Register</a>
+      </li>
+    `;
         }
       }
-
       function logout() {
         localStorage.removeItem("token");
         updateAuthLinks();
-        // Redirect to home page or sign in page
-        window.location.href = "index.html";
+        window.location.href = "signin.html"; // Changed to signin.html instead of index.html
       }
-
       // Call this function when the page loads
       document.addEventListener("DOMContentLoaded", updateAuthLinks);
     </script>
@@ -201,7 +204,7 @@
               >
                 <li class="scroll active"><a href="#home">home</a></li>
                 <li class="scroll"><a href="#works">how it works</a></li>
-                <li class="scroll"><a href="#explore">explore</a></li>
+                <li><a href="listing.html">explore</a></li>
                 <li class="scroll"><a href="#reviews">review</a></li>
                 <li class="scroll"><a href="#blog">blog</a></li>
                 <li class="scroll"><a href="#contact">contact</a></li>
@@ -248,7 +251,7 @@
                 <i class="flaticon-list-with-dots"></i>
               </div>
             </div>
-            <div class="single-welcome-hero-form">
+            <div class="single-welcome-hero-form" id="seachForm">
               <h3>location</h3>
               <form action="index.html">
                 <input type="text" placeholder="Ex: london, newyork, rome" />
@@ -259,13 +262,33 @@
             </div>
           </div>
           <div class="welcome-hero-serch">
-            <button class="welcome-hero-btn" onclick="window.location.href='#'">
+            <button class="welcome-hero-btn" onclick="searchProfessionals()">
               search <i data-feather="search"></i>
             </button>
           </div>
         </div>
       </div>
     </section>
+    <script>
+      function searchProfessionals() {
+        // Get input values
+        const professionInput = document.querySelector(
+          "input[placeholder*='Plumber']"
+        ).value;
+        const locationInput = document.querySelector(
+          "input[placeholder*='london']"
+        ).value;
+
+        // Construct the URL with query parameters
+        const searchUrl = `listing.html?profession=${encodeURIComponent(
+          professionInput
+        )}&location=${encodeURIComponent(locationInput)}`;
+
+        // Redirect to the results page with the search parameters
+        window.location.href = searchUrl;
+      }
+    </script>
+
     <!--/.welcome-hero-->
     <!--welcome-hero end -->
 
@@ -404,488 +427,6 @@
     </section>
     <!--/.works-->
     <!--works end -->
-
-    <!--explore start -->
-    <section id="explore" class="explore">
-      <div class="container">
-        <div class="section-header">
-          <h2>Featured Professionals</h2>
-          <p>Explore New place, food, culture around the world and many more</p>
-        </div>
-        <!--/.section-header-->
-        <div class="explore-content">
-          <div class="row">
-            <div class="col-md-4 col-sm-6">
-              <div class="single-explore-item">
-                <div class="single-explore-img">
-                  <img src="assets/images/explore/e1.jpg" alt="explore image" />
-                  <div class="single-explore-img-info">
-                    <button onclick="window.location.href='#'">
-                      best rated
-                    </button>
-                    <div class="single-explore-image-icon-box">
-                      <ul>
-                        <li>
-                          <div class="single-explore-image-icon">
-                            <i class="fa fa-arrows-alt"></i>
-                          </div>
-                        </li>
-                        <li>
-                          <div class="single-explore-image-icon">
-                            <i class="fa fa-bookmark-o"></i>
-                          </div>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-                <div class="single-explore-txt bg-theme-1">
-                  <h2><a href="#">tommy helfinger bar</a></h2>
-                  <p class="explore-rating-price">
-                    <span class="explore-rating">5.0</span>
-                    <a href="#"> 10 ratings</a>
-                    <span class="explore-price-box">
-                      form
-                      <span class="explore-price">5$-300$</span>
-                    </span>
-                    <a href="#">resturent</a>
-                  </p>
-                  <div class="explore-person">
-                    <div class="row">
-                      <div class="col-sm-2">
-                        <div class="explore-person-img">
-                          <a href="#">
-                            <img
-                              src="assets/images/explore/person.png"
-                              alt="explore person"
-                            />
-                          </a>
-                        </div>
-                      </div>
-                      <div class="col-sm-10">
-                        <p>
-                          Lorem ipsum dolor sit amet, consectetur adipisicing
-                          elit, sed do eiusmod tempor incid ut labore et dolore
-                          magna aliqua....
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="explore-open-close-part">
-                    <div class="row">
-                      <div class="col-sm-5">
-                        <button
-                          class="close-btn"
-                          onclick="window.location.href='#'"
-                        >
-                          close now
-                        </button>
-                      </div>
-                      <div class="col-sm-7">
-                        <div class="explore-map-icon">
-                          <a href="#"><i data-feather="map-pin"></i></a>
-                          <a href="#"><i data-feather="upload"></i></a>
-                          <a href="#"><i data-feather="heart"></i></a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-4 col-sm-6">
-              <div class="single-explore-item">
-                <div class="single-explore-img">
-                  <img src="assets/images/explore/e2.jpg" alt="explore image" />
-                  <div class="single-explore-img-info">
-                    <button onclick="window.location.href='#'">featured</button>
-                    <div class="single-explore-image-icon-box">
-                      <ul>
-                        <li>
-                          <div class="single-explore-image-icon">
-                            <i class="fa fa-arrows-alt"></i>
-                          </div>
-                        </li>
-                        <li>
-                          <div class="single-explore-image-icon">
-                            <i class="fa fa-bookmark-o"></i>
-                          </div>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-                <div class="single-explore-txt bg-theme-2">
-                  <h2><a href="#">swim and dine resort</a></h2>
-                  <p class="explore-rating-price">
-                    <span class="explore-rating">4.5</span>
-                    <a href="#"> 8 ratings</a>
-                    <span class="explore-price-box">
-                      form
-                      <span class="explore-price">50$-500$</span>
-                    </span>
-                    <a href="#">hotel</a>
-                  </p>
-                  <div class="explore-person">
-                    <div class="row">
-                      <div class="col-sm-2">
-                        <div class="explore-person-img">
-                          <a href="#">
-                            <img
-                              src="assets/images/explore/person.png"
-                              alt="explore person"
-                            />
-                          </a>
-                        </div>
-                      </div>
-                      <div class="col-sm-10">
-                        <p>
-                          Lorem ipsum dolor sit amet, consectetur adipisicing
-                          elit, sed do eiusmod tempor incid ut labore et dolore
-                          magna aliqua....
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="explore-open-close-part">
-                    <div class="row">
-                      <div class="col-sm-5">
-                        <button
-                          class="close-btn open-btn"
-                          onclick="window.location.href='#'"
-                        >
-                          open now
-                        </button>
-                      </div>
-                      <div class="col-sm-7">
-                        <div class="explore-map-icon">
-                          <a href="#"><i data-feather="map-pin"></i></a>
-                          <a href="#"><i data-feather="upload"></i></a>
-                          <a href="#"><i data-feather="heart"></i></a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-4 col-sm-6">
-              <div class="single-explore-item">
-                <div class="single-explore-img">
-                  <img src="assets/images/explore/e3.jpg" alt="explore image" />
-                  <div class="single-explore-img-info">
-                    <button onclick="window.location.href='#'">
-                      best rated
-                    </button>
-                    <div class="single-explore-image-icon-box">
-                      <ul>
-                        <li>
-                          <div class="single-explore-image-icon">
-                            <i class="fa fa-arrows-alt"></i>
-                          </div>
-                        </li>
-                        <li>
-                          <div class="single-explore-image-icon">
-                            <i class="fa fa-bookmark-o"></i>
-                          </div>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-                <div class="single-explore-txt bg-theme-3">
-                  <h2><a href="#">europe tour</a></h2>
-                  <p class="explore-rating-price">
-                    <span class="explore-rating">5.0</span>
-                    <a href="#"> 15 ratings</a>
-                    <span class="explore-price-box">
-                      form
-                      <span class="explore-price">5k$-10k$</span>
-                    </span>
-                    <a href="#">destination</a>
-                  </p>
-                  <div class="explore-person">
-                    <div class="row">
-                      <div class="col-sm-2">
-                        <div class="explore-person-img">
-                          <a href="#">
-                            <img
-                              src="assets/images/explore/person.png"
-                              alt="explore person"
-                            />
-                          </a>
-                        </div>
-                      </div>
-                      <div class="col-sm-10">
-                        <p>
-                          Lorem ipsum dolor sit amet, consectetur adipisicing
-                          elit, sed do eiusmod tempor incid ut labore et dolore
-                          magna aliqua....
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="explore-open-close-part">
-                    <div class="row">
-                      <div class="col-sm-5">
-                        <button
-                          class="close-btn"
-                          onclick="window.location.href='#'"
-                        >
-                          close now
-                        </button>
-                      </div>
-                      <div class="col-sm-7">
-                        <div class="explore-map-icon">
-                          <a href="#"><i data-feather="map-pin"></i></a>
-                          <a href="#"><i data-feather="upload"></i></a>
-                          <a href="#"><i data-feather="heart"></i></a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-4 col-sm-6">
-              <div class="single-explore-item">
-                <div class="single-explore-img">
-                  <img src="assets/images/explore/e4.jpg" alt="explore image" />
-                  <div class="single-explore-img-info">
-                    <button onclick="window.location.href='#'">
-                      most view
-                    </button>
-                    <div class="single-explore-image-icon-box">
-                      <ul>
-                        <li>
-                          <div class="single-explore-image-icon">
-                            <i class="fa fa-arrows-alt"></i>
-                          </div>
-                        </li>
-                        <li>
-                          <div class="single-explore-image-icon">
-                            <i class="fa fa-bookmark-o"></i>
-                          </div>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-                <div class="single-explore-txt bg-theme-4">
-                  <h2><a href="#">banglow with swiming pool</a></h2>
-                  <p class="explore-rating-price">
-                    <span class="explore-rating">5.0</span>
-                    <a href="#"> 10 ratings</a>
-                    <span class="explore-price-box">
-                      form
-                      <span class="explore-price">10k$-15k$</span>
-                    </span>
-                    <a href="#">real estate</a>
-                  </p>
-                  <div class="explore-person">
-                    <div class="row">
-                      <div class="col-sm-2">
-                        <div class="explore-person-img">
-                          <a href="#">
-                            <img
-                              src="assets/images/explore/person.png"
-                              alt="explore person"
-                            />
-                          </a>
-                        </div>
-                      </div>
-                      <div class="col-sm-10">
-                        <p>
-                          Lorem ipsum dolor sit amet, consectetur adipisicing
-                          elit, sed do eiusmod tempor incid ut labore et dolore
-                          magna aliqua....
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="explore-open-close-part">
-                    <div class="row">
-                      <div class="col-sm-5">
-                        <button
-                          class="close-btn"
-                          onclick="window.location.href='#'"
-                        >
-                          close now
-                        </button>
-                      </div>
-                      <div class="col-sm-7">
-                        <div class="explore-map-icon">
-                          <a href="#"><i data-feather="map-pin"></i></a>
-                          <a href="#"><i data-feather="upload"></i></a>
-                          <a href="#"><i data-feather="heart"></i></a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-4 col-sm-6">
-              <div class="single-explore-item">
-                <div class="single-explore-img">
-                  <img src="assets/images/explore/e5.jpg" alt="explore image" />
-                  <div class="single-explore-img-info">
-                    <button onclick="window.location.href='#'">featured</button>
-                    <div class="single-explore-image-icon-box">
-                      <ul>
-                        <li>
-                          <div class="single-explore-image-icon">
-                            <i class="fa fa-arrows-alt"></i>
-                          </div>
-                        </li>
-                        <li>
-                          <div class="single-explore-image-icon">
-                            <i class="fa fa-bookmark-o"></i>
-                          </div>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-                <div class="single-explore-txt bg-theme-2">
-                  <h2><a href="#">vintage car expo</a></h2>
-                  <p class="explore-rating-price">
-                    <span class="explore-rating">4.2</span>
-                    <a href="#"> 8 ratings</a>
-                    <span class="explore-price-box">
-                      form
-                      <span class="explore-price">500$-1200$</span>
-                    </span>
-                    <a href="#">automotion</a>
-                  </p>
-                  <div class="explore-person">
-                    <div class="row">
-                      <div class="col-sm-2">
-                        <div class="explore-person-img">
-                          <a href="#">
-                            <img
-                              src="assets/images/explore/person.png"
-                              alt="explore person"
-                            />
-                          </a>
-                        </div>
-                      </div>
-                      <div class="col-sm-10">
-                        <p>
-                          Lorem ipsum dolor sit amet, consectetur adipisicing
-                          elit, sed do eiusmod tempor incid ut labore et dolore
-                          magna aliqua....
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="explore-open-close-part">
-                    <div class="row">
-                      <div class="col-sm-5">
-                        <button
-                          class="close-btn open-btn"
-                          onclick="window.location.href='#'"
-                        >
-                          open now
-                        </button>
-                      </div>
-                      <div class="col-sm-7">
-                        <div class="explore-map-icon">
-                          <a href="#"><i data-feather="map-pin"></i></a>
-                          <a href="#"><i data-feather="upload"></i></a>
-                          <a href="#"><i data-feather="heart"></i></a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-4 col-sm-6">
-              <div class="single-explore-item">
-                <div class="single-explore-img">
-                  <img src="assets/images/explore/e6.jpg" alt="explore image" />
-                  <div class="single-explore-img-info">
-                    <button onclick="window.location.href='#'">
-                      best rated
-                    </button>
-                    <div class="single-explore-image-icon-box">
-                      <ul>
-                        <li>
-                          <div class="single-explore-image-icon">
-                            <i class="fa fa-arrows-alt"></i>
-                          </div>
-                        </li>
-                        <li>
-                          <div class="single-explore-image-icon">
-                            <i class="fa fa-bookmark-o"></i>
-                          </div>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-                <div class="single-explore-txt bg-theme-5">
-                  <h2><a href="#">thailand tour</a></h2>
-                  <p class="explore-rating-price">
-                    <span class="explore-rating">5.0</span>
-                    <a href="#"> 15 ratings</a>
-                    <span class="explore-price-box">
-                      form
-                      <span class="explore-price">5k$-10k$</span>
-                    </span>
-                    <a href="#">destination</a>
-                  </p>
-                  <div class="explore-person">
-                    <div class="row">
-                      <div class="col-sm-2">
-                        <div class="explore-person-img">
-                          <a href="#">
-                            <img
-                              src="assets/images/explore/person.png"
-                              alt="explore person"
-                            />
-                          </a>
-                        </div>
-                      </div>
-                      <div class="col-sm-10">
-                        <p>
-                          Lorem ipsum dolor sit amet, consectetur adipisicing
-                          elit, sed do eiusmod tempor incid ut labore et dolore
-                          magna aliqua....
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="explore-open-close-part">
-                    <div class="row">
-                      <div class="col-sm-5">
-                        <button
-                          class="close-btn"
-                          onclick="window.location.href='#'"
-                        >
-                          close now
-                        </button>
-                      </div>
-                      <div class="col-sm-7">
-                        <div class="explore-map-icon">
-                          <a href="#"><i data-feather="map-pin"></i></a>
-                          <a href="#"><i data-feather="upload"></i></a>
-                          <a href="#"><i data-feather="heart"></i></a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!--/.container-->
-    </section>
-    <!--/.explore-->
-    <!--explore end -->
 
     <!--reviews start -->
     <section id="reviews" class="reviews">
@@ -1347,7 +888,7 @@
             <div class="col-sm-9">
               <ul class="footer-menu-item">
                 <li class="scroll"><a href="#works">how it works</a></li>
-                <li class="scroll"><a href="#explore">explore</a></li>
+                <li class="scroll"><a href="listing.html">explore</a></li>
                 <li class="scroll"><a href="#reviews">review</a></li>
                 <li class="scroll"><a href="#blog">blog</a></li>
                 <li class="scroll"><a href="#contact">contact</a></li>
