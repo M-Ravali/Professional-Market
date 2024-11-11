@@ -1,3 +1,6 @@
+jest.setTimeout(30000); 
+
+
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 const User = require("../User"); // Adjust path as needed
@@ -5,16 +8,12 @@ const User = require("../User"); // Adjust path as needed
 describe("User Model", () => {
   // Connect to a new in-memory database before running any tests
   beforeAll(async () => {
-    await mongoose.connect("mongodb://localhost:27017/test", {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
-  });
+    await mongoose.connect("mongodb://localhost:27017/test");
+  }, 30000);
 
-  // Clear all test data after each test
   afterEach(async () => {
     await User.deleteMany({});
-  });
+  }, 10000);
 
   // Disconnect after all tests are done
   afterAll(async () => {
@@ -34,7 +33,9 @@ describe("User Model", () => {
       const savedUser = await User.findOne({ email: "testuser@example.com" });
 
       expect(savedUser.password).not.toBe("plaintextpassword"); // Password should be hashed
-      expect(await bcrypt.compare("plaintextpassword", savedUser.password)).toBe(true); // Hashed password should match
+      expect(
+        await bcrypt.compare("plaintextpassword", savedUser.password)
+      ).toBe(true); // Hashed password should match
     });
   });
 
@@ -104,13 +105,17 @@ describe("User Model", () => {
     });
 
     it("should filter by location", async () => {
-      const professionals = await User.findProfessionals({ location: "New York" });
+      const professionals = await User.findProfessionals({
+        location: "New York",
+      });
       expect(professionals.length).toBe(1);
       expect(professionals[0].name).toBe("John Doe");
     });
 
     it("should filter by profession", async () => {
-      const professionals = await User.findProfessionals({ profession: "designer" });
+      const professionals = await User.findProfessionals({
+        profession: "designer",
+      });
       expect(professionals.length).toBe(1);
       expect(professionals[0].name).toBe("Jane Smith");
     });
