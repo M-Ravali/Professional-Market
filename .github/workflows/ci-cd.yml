@@ -32,11 +32,13 @@ jobs:
         run: npm ci
 
       - name: Run Tests
-        run: npm test
+        run: |
+          pwd
+          ls -al
+          npm test
         env:
           NODE_ENV: test
-          # Add your test environment variables here
-          DATABASE_URL: mongodb://localhost:27017/test
+          DATABASE_URL: "mongodb://localhost:27017/test"  # This will be overridden by mongodb-memory-server during tests
 
   deploy:
     needs: test
@@ -48,24 +50,21 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: "18.x"
           cache: "npm"
           cache-dependency-path: "./backend/package-lock.json"
-
       - name: Install Dependencies
         run: npm ci
-
       - name: Build
         run: npm run build
         env:
           NODE_ENV: production
 
-    # Uncomment and customize the deployment section based on your hosting platform
-    # - name: Deploy
-    #   run: |
-    #     # Add your deployment commands here
-    #     echo "Add your deployment steps"
+      # Uncomment and customize the deployment section
+      # - name: Deploy
+      #   run: |
+      #     # Add your deployment commands here
+      #     echo "Add your deployment steps"

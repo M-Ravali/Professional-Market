@@ -1,23 +1,30 @@
-jest.setTimeout(30000); 
-
+jest.setTimeout(30000);
 
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
-const User = require("../User"); // Adjust path as needed
+const { MongoMemoryServer } = require("mongodb-memory-server");
+const User = require("../models/User"); // Adjust path as needed
+
+let mongoServer;
 
 describe("User Model", () => {
-  // Connect to a new in-memory database before running any tests
+  // Start MongoDB in-memory server before running any tests
   beforeAll(async () => {
-    await mongoose.connect("mongodb://localhost:27017/test");
+    mongoServer = await MongoMemoryServer.create();
+    const mongoUri = mongoServer.getUri();
+    // Establish connection only once before any tests run
+    await mongoose.connect(mongoUri, { useNewUrlParser: true, useUnifiedTopology: true });
   }, 30000);
 
+  // Clean up database between tests
   afterEach(async () => {
-    await User.deleteMany({});
+    await User.deleteMany({}); // Reset the User collection
   }, 10000);
 
   // Disconnect after all tests are done
   afterAll(async () => {
-    await mongoose.connection.close();
+    await mongoose.disconnect(); // Properly disconnect from MongoDB
+    await mongoServer.stop(); // Stop the in-memory server
   });
 
   describe("Password Encryption", () => {
