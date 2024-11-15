@@ -40,28 +40,28 @@ jobs:
           NODE_ENV: test
           DATABASE_URL: "mongodb://localhost:27017/test"  # This will be overridden by mongodb-memory-server during tests
 
-  deploy:
-    needs: test
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
-    defaults:
-      run:
-        working-directory: ./backend
+  # deploy:
+  #   needs: test
+  #   runs-on: ubuntu-latest
+  #   if: github.ref == 'refs/heads/main'
+  #   defaults:
+  #     run:
+  #       working-directory: ./backend
 
-    steps:
-      - uses: actions/checkout@v3
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: "18.x"
-          cache: "npm"
-          cache-dependency-path: "./backend/package-lock.json"
-      - name: Install Dependencies
-        run: npm ci
-      - name: Build
-        run: npm run build
-        env:
-          NODE_ENV: production
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - name: Setup Node.js
+  #       uses: actions/setup-node@v3
+  #       with:
+  #         node-version: "18.x"
+  #         cache: "npm"
+  #         cache-dependency-path: "./backend/package-lock.json"
+  #     - name: Install Dependencies
+  #       run: npm ci
+  #     - name: Build
+  #       run: npm run build
+  #       env:
+  #         NODE_ENV: production
 
       # Uncomment and customize the deployment section
       # - name: Deploy
