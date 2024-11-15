@@ -17,7 +17,7 @@ router.get("/professionals", async (req, res) => {
 
     res.json(professionals);
   } catch (err) {
-    console.error("Error fetching professionals:", err);
+    // console.error("Error fetching professionals:", err);
     res.status(500).json({ message: "Server error" });
   }
 });
