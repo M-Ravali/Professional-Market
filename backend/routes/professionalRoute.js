@@ -21,21 +21,6 @@ router.get("/professionals", async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 });
-// Search Professionals Route
-// router.post("/professionals/search", async (req, res) => {
-//   const { location, skills, experience } = req.body;
-
-//   try {
-//     const professionals = await User.findProfessionals({
-//       location,
-//       skills,
-//       experience,
-//     });
-//     res.status(200).json(professionals);
-//   } catch (error) {
-//     res.status(500).send("Error searching for professionals");
-//   }
-// });
 
 // Submit a Review Route
 router.post("/professionals/review", async (req, res) => {
