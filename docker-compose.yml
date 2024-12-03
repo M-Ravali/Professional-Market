@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    ports:
+      - "5000:5000" # Map backend container port 5000 to host port 5000
+    volumes:
+      - ./backend:/app # Optional: Mount backend source code for live updates
+    environment:
+      - NODE_ENV=production # Example environment variable for the backend
+      - MONGO_URI=mongodb://mongo:27017/professionalmarketdb # Use MongoDB service name as hostname
+    depends_on:
+      - mongo
+
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+    ports:
+      - "3000:80" # Map frontend container port 80 to host port 3000
+    volumes:
+      - ./frontend:/usr/share/nginx/html # Optional: Mount frontend code for live updates
+    depends_on:
+      - backend
+
+  mongo:
+    image: mongo:latest
+    container_name: mongodb
+    ports:
+      - "27017:27017" # Map MongoDB container port to host
+    volumes:
+      - mongo_data:/data/db
+
+volumes:
+  mongo_data: # Persistent volume for MongoDB data

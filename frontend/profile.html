@@ -33,8 +33,7 @@
         border-radius: 20px;
         box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
         overflow: hidden;
-        max-width: 400px;
-        width: 100%;
+        width: 60%;
       }
       .profile-header {
         background: linear-gradient(45deg, #ff6b6b, #ffc2c2);
@@ -101,9 +100,10 @@
         border: none;
         padding: 10px 20px;
         border-radius: 20px;
-        margin-top: 20px;
         cursor: pointer;
         transition: background-color 0.3s;
+        display: block;
+        margin: 20px auto;
       }
       .show-more:hover {
         background-color: #ff5252;
@@ -168,6 +168,31 @@
       .edit-form button:hover {
         background-color: #ff5252;
       }
+      .bookings-section {
+        margin-top: 20px;
+        padding: 10px;
+        background-color: #f9f9f9;
+        border-radius: 10px;
+      }
+
+      .booking-card {
+        border: 1px solid #ddd;
+        padding: 10px;
+        margin-bottom: 10px;
+        border-radius: 5px;
+        background-color: white;
+      }
+
+      .booking-card h3 {
+        margin-bottom: 5px;
+        font-size: 18px;
+        color: #ff6b6b;
+      }
+
+      .booking-card p {
+        margin: 2px 0;
+        color: #555;
+      }
     </style>
   </head>
   <body>
@@ -201,10 +226,8 @@
             <div class="stat-label">Comments</div>
           </div>
         </div>
-        <button class="show-more" onclick="toggleAdditionalInfo()">
-          Show more
-        </button>
       </div>
+
       <div class="additional-info" id="additionalInfo">
         <div class="info-item">
           <span class="info-label">Email:</span>
@@ -224,7 +247,14 @@
             <span id="userExperience"></span>
           </div>
         </div>
+        <div class="bookings-section">
+          <h2>Your Bookings</h2>
+          <div id="bookingsContainer"></div>
+        </div>
       </div>
+      <button class="show-more" onclick="toggleAdditionalInfo()">
+        Show more
+      </button>
     </div>
 
     <!-- Edit form for profile details -->
@@ -252,7 +282,7 @@
     </div>
 
     <script>
-      const API_URL = "http://localhost:5000/users"; // Update this with your actual backend URL
+      const API_URL = "http://localhost:5000"; // Update this with your actual backend URL
 
       function toggleEditForm() {
         const editForm = document.getElementById("editForm");
@@ -285,7 +315,7 @@
         }
 
         try {
-          const response = await fetch(`${API_URL}/profile`, {
+          const response = await fetch(`${API_URL}/users/profile`, {
             headers: {
               Authorization: `Bearer ${token}`,
             },
@@ -324,8 +354,15 @@
 
       function toggleAdditionalInfo() {
         const additionalInfo = document.getElementById("additionalInfo");
-        additionalInfo.style.display =
-          additionalInfo.style.display === "block" ? "none" : "block";
+        const showMoreButton = document.querySelector(".show-more");
+
+        if (additionalInfo.style.display === "block") {
+          additionalInfo.style.display = "none";
+          showMoreButton.textContent = "Show more";
+        } else {
+          additionalInfo.style.display = "block";
+          showMoreButton.textContent = "Show less";
+        }
       }
 
       async function saveProfile() {
@@ -344,7 +381,7 @@
         // const education = document.getElementById("editEducation").value;
 
         try {
-          const response = await fetch(`${API_URL}/updateProfile`, {
+          const response = await fetch(`${API_URL}/users/updateProfile`, {
             method: "PUT",
             headers: {
               "Content-Type": "application/json",
@@ -375,7 +412,49 @@
         window.location.href = "index.html";
       }
 
+      async function fetchBookings() {
+        const token = localStorage.getItem("token");
+
+        try {
+          const response = await fetch(`${API_URL}/api/client/bookings`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+
+          if (!response.ok) throw new Error("Unable to fetch bookings.");
+
+          const bookings = await response.json();
+          renderBookings(bookings);
+        } catch (error) {
+          console.error(error);
+          alert("Failed to fetch bookings.");
+        }
+      }
+
+      function renderBookings(bookings) {
+        const bookingsContainer = document.getElementById("bookingsContainer");
+        bookingsContainer.innerHTML = ""; // Clear existing bookings
+
+        bookings.forEach((booking) => {
+          const bookingCard = `
+      <div class="booking-card">
+        <h3>${booking.professionalId.name}</h3>
+        <p>Profession: ${booking.professionalId.profession}</p>
+        <p>Date: ${new Date(booking.date).toLocaleDateString()}</p>
+        <p>Time:  <span id="bookingTime">${booking.time} </span></p>
+        <p>Location: ${booking.professionalId.location}</p>
+        <p>Message: ${booking.message}</p>
+        <p class="booking-status">Status: ${booking.status}</p>
+      </div>
+    `;
+          bookingsContainer.innerHTML += bookingCard;
+        });
+      }
+
+
       fetchProfile();
+      fetchBookings();
     </script>
   </body>
 </html>

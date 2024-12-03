@@ -302,7 +302,7 @@
                 <div class="single-list-topics-icon">
                   <i class="flaticon-restaurant"></i>
                 </div>
-                <h2><a href="#">plumbing</a></h2>
+                <h2><a href="listing.html">plumbing</a></h2>
                 <p>150 listings</p>
               </div>
             </li>
@@ -311,7 +311,7 @@
                 <div class="single-list-topics-icon">
                   <i class="flaticon-travel"></i>
                 </div>
-                <h2><a href="#">Electrical</a></h2>
+                <h2><a href="listing.html">Electrical</a></h2>
                 <p>214 listings</p>
               </div>
             </li>
@@ -320,7 +320,7 @@
                 <div class="single-list-topics-icon">
                   <i class="flaticon-building"></i>
                 </div>
-                <h2><a href="#">Freelancing</a></h2>
+                <h2><a href="listing.html">Freelancing</a></h2>
                 <p>185 listings</p>
               </div>
             </li>
@@ -329,7 +329,7 @@
                 <div class="single-list-topics-icon">
                   <i class="flaticon-pills"></i>
                 </div>
-                <h2><a href="#">Home Services</a></h2>
+                <h2><a href="listing.html">Home Services</a></h2>
                 <p>200 listings</p>
               </div>
             </li>
@@ -338,7 +338,7 @@
                 <div class="single-list-topics-icon">
                   <i class="flaticon-transport"></i>
                 </div>
-                <h2><a href="#">Professional services</a></h2>
+                <h2><a href="listing.html">Professional services</a></h2>
                 <p>120 listings</p>
               </div>
             </li>
@@ -369,12 +369,12 @@
                   <a href="#">choose <span> a</span> Service</a>
                 </h2>
                 <p>
-                  Lorem ipsum dolor sit amet, consecte adipisicing elit, sed do
-                  eiusmod tempor incididunt ut laboremagna aliqua.
+                  Browse our professional services to find the right expert for
+                  your needs.
                 </p>
                 <button
                   class="welcome-hero-btn how-work-btn"
-                  onclick="window.location.href='#'"
+                  onclick="window.location.href='listing.html'"
                 >
                   read more
                 </button>
@@ -389,12 +389,12 @@
                   <a href="#">find a<span> Professional </span></a>
                 </h2>
                 <p>
-                  Lorem ipsum dolor sit amet, consecte adipisicing elit, sed do
-                  eiusmod tempor incididunt ut laboremagna aliqua.
+                  Discover vetted local providers and book appointments through
+                  our directory.
                 </p>
                 <button
                   class="welcome-hero-btn how-work-btn"
-                  onclick="window.location.href='#'"
+                  onclick="window.location.href='listing.html'"
                 >
                   read more
                 </button>
@@ -409,12 +409,12 @@
                   <a href="#">Book <span> directly</span> </a>
                 </h2>
                 <p>
-                  Lorem ipsum dolor sit amet, consecte adipisicing elit, sed do
-                  eiusmod tempor incididunt ut laboremagna aliqua.
+                  Use our online booking to easily schedule services with your
+                  preferred provider.
                 </p>
                 <button
                   class="welcome-hero-btn how-work-btn"
-                  onclick="window.location.href='#'"
+                  onclick="window.location.href='listing.html'"
                 >
                   read more
                 </button>
@@ -788,8 +788,7 @@
                     posted <span>by</span> <a href="#">admin</a> march 2018
                   </h4>
                   <p>
-                    Lorem ipsum dolor sit amet, consectetur de adipisicing elit,
-                    sed do eiusmod tempore incididunt ut labore et dolore magna.
+                    Our guide covers key factors to vet qualified and reliable electricians.
                   </p>
                 </div>
               </div>
@@ -805,8 +804,7 @@
                     posted <span>by</span> <a href="#">admin</a> march 2018
                   </h4>
                   <p>
-                    Lorem ipsum dolor sit amet, consectetur de adipisicing elit,
-                    sed do eiusmod tempore incididunt ut labore et dolore magna.
+                    Effective strategies for finding, vetting, and managing remote talent.
                   </p>
                 </div>
               </div>
@@ -824,8 +822,7 @@
                     posted <span>by</span> <a href="#">admin</a> march 2018
                   </h4>
                   <p>
-                    Lorem ipsum dolor sit amet, consectetur de adipisicing elit,
-                    sed do eiusmod tempore incididunt ut labore et dolore magna.
+                    Tips and tools to simplify your property search and booking process.
                   </p>
                 </div>
               </div>
@@ -850,18 +847,73 @@
         </div>
         <div class="row">
           <div class="col-sm-12">
-            <div class="subscription-input-group">
-              <form action="#">
+            <div
+              style="
+                width: 100%;
+                max-width: 600px;
+                margin: 20px auto;
+                padding: 20px;
+                background-color: #f9f9f9;
+                border: 1px solid #ddd;
+                border-radius: 8px;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+              "
+            >
+              <form
+                action="https://formspree.io/f/xldeaazq"
+                method="POST"
+                style="display: flex; flex-direction: column; gap: 15px"
+              >
                 <input
                   type="email"
-                  class="subscription-input-form"
+                  name="email"
                   placeholder="Enter your email here"
+                  required
+                  style="
+                    width: 100%;
+                    padding: 10px;
+                    font-size: 16px;
+                    border: 1px solid #ccc;
+                    border-radius: 4px;
+                    box-sizing: border-box;
+                    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+                  "
                 />
+                <textarea
+                  name="message"
+                  placeholder="Type your message..."
+                  required
+                  style="
+                    width: 100%;
+                    padding: 10px;
+                    font-size: 16px;
+                    border: 1px solid #ccc;
+                    border-radius: 4px;
+                    box-sizing: border-box;
+                    min-height: 120px;
+                    resize: vertical;
+                    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+                  "
+                ></textarea>
                 <button
-                  class="appsLand-btn subscribe-btn"
-                  onclick="window.location.href='#'"
+                  type="submit"
+                  style="
+                    width: 100%;
+                    padding: 12px 20px;
+                    font-size: 16px;
+                    color: #fff;
+                    background-color: #ff6b6b;
+                    border: none;
+                    border-radius: 4px;
+                    cursor: pointer;
+                    text-align: center;
+                    transition: background-color 0.3s ease, transform 0.2s ease;
+                  "
+                  onmouseover="this.style.backgroundColor='f78787'; this.style.transform='translateY(-2px)';"
+                  onmouseout="this.style.backgroundColor='#ff6b6b'; this.style.transform='translateY(0)';"
+                  onmousedown="this.style.backgroundColor='#fd4a4a'; this.style.transform='translateY(1px)';"
                 >
-                  creat account
+                  Send
                 </button>
               </form>
             </div>
@@ -875,29 +927,6 @@
     <!--footer start-->
     <footer id="footer" class="footer">
       <div class="container">
-        <div class="footer-menu">
-          <div class="row">
-            <div class="col-sm-3">
-              <div class="navbar-header">
-                <a class="navbar-brand" href="index.html"
-                  >Professional<span>Market</span></a
-                >
-              </div>
-              <!--/.navbar-header-->
-            </div>
-            <div class="col-sm-9">
-              <ul class="footer-menu-item">
-                <li class="scroll"><a href="#works">how it works</a></li>
-                <li class="scroll"><a href="listing.html">explore</a></li>
-                <li class="scroll"><a href="#reviews">review</a></li>
-                <li class="scroll"><a href="#blog">blog</a></li>
-                <li class="scroll"><a href="#contact">contact</a></li>
-                <li class="scroll"><a href="#contact">my account</a></li>
-              </ul>
-              <!--/.nav -->
-            </div>
-          </div>
-        </div>
         <div class="hm-footer-copyright">
           <div class="row">
             <div class="col-sm-5">
