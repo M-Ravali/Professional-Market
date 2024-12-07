@@ -1,14 +1,10 @@
-# Use an Nginx base image
+# Use a base image with a lightweight web server
 FROM nginx:alpine
 
-# Set the working directory inside the container
-WORKDIR /usr/share/nginx/html
+# Copy all static files to the web server directory
+COPY . /usr/share/nginx/html
 
-# Copy your static frontend files to the container
-COPY frontend/ .
+# Expose port 3000 (though nginx defaults to port 80)
+EXPOSE 3000
 
-# Expose the port Nginx serves on (default: 80)
-EXPOSE 80
-
-# Start the Nginx server
-CMD ["nginx", "-g", "daemon off;"]
+# Nginx is configured to run automatically in the nginx:alpine image

@@ -4,7 +4,7 @@
   "main": "server.js",
   "scripts": {
     "test": "jest",
-    "wait-for-it": "wait-for-it mongo:27017 -- npm start"
+    "start": "node server.js"
   },
   "author": "",
   "license": "ISC",
